@@ -1,4 +1,7 @@
 import numpy as np
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 
 class SMO:
@@ -230,3 +233,31 @@ class SMO:
         """预测"""
         y_pred = np.apply_along_axis(self._predict_one, 1, X_test)
         return np.squeeze(np.where(y_pred > 0, 1., -1.))
+
+
+def Data_prapare(
+        dataurl='https://archive.ics.uci.edu/ml/machine-learning-databases/letter-recognition/letter-recognition.data'):
+    X = np.genfromtxt(dataurl, delimiter=',', usecols=range(1, 17))
+    y = np.genfromtxt(dataurl, delimiter=',', usecols=[0], dtype=np.str_)
+    y = np.where(y == 'C', 1, -1)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+    ss = StandardScaler()
+    ss.fit(X_train)
+    X_train = ss.transform(X_train)
+    X_test = ss.transform(X_test)
+    return X_train, X_test, y_train, y_test
+
+
+def Search_best(X_train, X_test, y_train, y_test, C_list=(1,), tol=0.01, gamma_list=(0.01,)):
+    acc_list, par_list = [], []
+    for C in C_list:
+        for gamma in gamma_list:
+            print((C, gamma))
+            clf = SMO(C=C, tol=0.01, kernel='rbf', gamma=gamma)
+            clf.train(X_train, y_train)
+            y_pred = clf.predict(X_test)
+            accuracy = accuracy_score(y_test, y_pred)
+            acc_list.append(accuracy)
+            par_list.append((C, gamma))
+    return acc_list, par_list, y_pred

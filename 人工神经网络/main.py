@@ -32,18 +32,18 @@ if __name__ == "__main__":
     # 针对y_train、y_test完成one-hot编码（即1 of n）编码
     lb = LabelBinarizer()
     y_train_bin = lb.fit_transform(y_train)
-    etalist = [0.1, 0.3, 0.5]
-    for eta in etalist:
-        clf = ANNClassifier(hidden_layer_sizes=(10,), eta=eta, max_iter=500, tol=0.00001)
-        clf.train(X_train_std, y_train_bin)
-        y_pred_bin = clf.predict(X_test_std)
-        y_pred = lb.inverse_transform(y_pred_bin)
-        accuracy = accuracy_score(y_test, y_pred)
-        print(f'eta={eta},accuracy={accuracy}')
-
-    # 将tra[0:9]的数据转为方阵图，保存并显示
-    for i in range(10):
-        tra1 = data_train[i, :-1]
-        tra2 = tra1.reshape(8, 8)
-        plt.matshow(tra2,cmap='gray')
-        plt.savefig('fig/' + str(i) + '.jpg')
+    # etalist = [0.1, 0.3, 0.5]
+    # for eta in etalist:
+    #     clf = ANNClassifier(hidden_layer_sizes=(10,), eta=eta, max_iter=500, tol=0.00001)
+    #     clf.train(X_train_std, y_train_bin)
+    #     y_pred_bin = clf.predict(X_test_std)
+    #     y_pred = lb.inverse_transform(y_pred_bin)
+    #     accuracy = accuracy_score(y_test, y_pred)
+    #     print(f'eta={eta},accuracy={accuracy}')
+    #
+    # # 将tra[0:9]的数据转为方阵图，保存并显示
+    # for i in range(20):
+    #     tra1 = data_train[i, :-1]
+    #     tra2 = tra1.reshape(8, 8)
+    #     plt.matshow(tra2,cmap=plt.cm.binary)
+    #     plt.savefig('fig/' + str(i) + '.jpg')
